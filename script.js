@@ -16,7 +16,17 @@ document.addEventListener("DOMContentLoaded",()=>{
   pl?.addEventListener("change",so);so();
 
   const f=document.querySelector("#audit-form");
-  f?.addEventListener("submit",x=>{x.preventDefault();const d=Object.fromEntries(new FormData(f).entries());const plat=d.platform==="Other"?(d.platform_other||"Other"):d.platform;let a=["Hi Usama, I'd like to request a Free Store Audit.","",`Project type: ${d.lead_type==="existing"?"Existing store":"New project"}`,`Platform: ${plat}`];if(d.lead_type==="existing")a.push(`Store URL: ${d.store_url||"Not provided"}`,`Goal: ${d.goal_existing||"Not provided"}`,`Current situation: ${d.current_situation||"Not provided"}`);else a.push(`Product/category: ${d.product_category||"Not provided"}`,`Goal: ${d.goal||"Not provided"}`,`Required service: ${d.required_service||"Not specified"}`);if(d.notes)a.push(`Additional notes: ${d.notes}`);window.open("https://wa.me/923299132452?text="+encodeURIComponent(a.join("\n")),"_blank")});
+  function getAuditMessage(){
+    const d=Object.fromEntries(new FormData(f).entries());
+    const plat=d.platform==="Other"?(d.platform_other||"Other"):d.platform;
+    let a=["Hi Usama, I'd like to request a Free Store Audit.","",`Project type: ${d.lead_type==="existing"?"Existing store":"New project"}`,`Platform: ${plat}`];
+    if(d.lead_type==="existing") a.push(`Store URL: ${d.store_url||"Not provided"}`,`Goal: ${d.goal_existing||"Not provided"}`,`Current situation: ${d.current_situation||"Not provided"}`);
+    else a.push(`Product/category: ${d.product_category||"Not provided"}`,`Goal: ${d.goal||"Not provided"}`,`Required service: ${d.required_service||"Not specified"}`);
+    if(d.notes) a.push(`Additional notes: ${d.notes}`);
+    return a.join("\n");
+  }
+  f?.addEventListener("submit",x=>{x.preventDefault();window.open("https://wa.me/923299132452?text="+encodeURIComponent(getAuditMessage()),"_blank")});
+  document.querySelector("#email-audit-btn")?.addEventListener("click",()=>{if(!f?.reportValidity())return;const body=getAuditMessage();window.location.href="mailto:usama.ecomops@gmail.com?subject="+encodeURIComponent("Free Store Audit Request")+"&body="+encodeURIComponent(body)});
 
   const m=document.querySelector(".modal");
   const body=m?.querySelector(".modal-body"),title=m?.querySelector("[data-title]");
