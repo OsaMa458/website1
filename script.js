@@ -2,7 +2,11 @@ document.addEventListener("DOMContentLoaded",()=>{
   document.querySelectorAll("#year").forEach(x=>x.textContent=new Date().getFullYear());
 
   const b=document.querySelector(".menu-btn"),n=document.querySelector(".nav");
-  if(b&&n)b.onclick=()=>{const o=n.classList.toggle("open");b.setAttribute("aria-expanded",o)};
+  if(b&&n){
+    b.onclick=()=>{const o=n.classList.toggle("open");b.setAttribute("aria-expanded",String(o));};
+    n.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{n.classList.remove('open');b.setAttribute('aria-expanded','false')}));
+    document.addEventListener('click',e=>{if(n.classList.contains('open')&&!n.contains(e.target)&&!b.contains(e.target)){n.classList.remove('open');b.setAttribute('aria-expanded','false')}});
+  }
 
   const t=document.querySelector("#lead-type"),e=document.querySelector("#existing-fields"),p=document.querySelector("#project-fields");
   function sync(){if(!t)return;e.classList.toggle("hidden",t.value!=="existing");p.classList.toggle("hidden",t.value==="existing")}
@@ -12,7 +16,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   pl?.addEventListener("change",so);so();
 
   const f=document.querySelector("#audit-form");
-  f?.addEventListener("submit",x=>{x.preventDefault();const d=Object.fromEntries(new FormData(f).entries());const plat=d.platform==="Other"?(d.platform_other||"Other"):d.platform;let a=["Hi Usama, I'd like to request a Free Store Audit.","",`Project type: ${d.lead_type==="existing"?"Existing store":"New project"}`,`Platform: ${plat}`];if(d.lead_type==="existing")a.push(`Store URL: ${d.store_url||"Not provided"}`,`Goal: ${d.goal_existing||"Not provided"}`,`Current situation: ${d.current_situation||"Not provided"}`);else a.push(`Product/category: ${d.product_category||"Not provided"}`,`Goal: ${d.goal_existing||"Not provided"}`,`Required service: ${d.required_service||"Not specified"}`);if(d.notes)a.push(`Additional notes: ${d.notes}`);window.open("https://wa.me/923299132452?text="+encodeURIComponent(a.join("\n")),"_blank")});
+  f?.addEventListener("submit",x=>{x.preventDefault();const d=Object.fromEntries(new FormData(f).entries());const plat=d.platform==="Other"?(d.platform_other||"Other"):d.platform;let a=["Hi Usama, I'd like to request a Free Store Audit.","",`Project type: ${d.lead_type==="existing"?"Existing store":"New project"}`,`Platform: ${plat}`];if(d.lead_type==="existing")a.push(`Store URL: ${d.store_url||"Not provided"}`,`Goal: ${d.goal_existing||"Not provided"}`,`Current situation: ${d.current_situation||"Not provided"}`);else a.push(`Product/category: ${d.product_category||"Not provided"}`,`Goal: ${d.goal||"Not provided"}`,`Required service: ${d.required_service||"Not specified"}`);if(d.notes)a.push(`Additional notes: ${d.notes}`);window.open("https://wa.me/923299132452?text="+encodeURIComponent(a.join("\n")),"_blank")});
 
   const m=document.querySelector(".modal");
   const body=m?.querySelector(".modal-body"),title=m?.querySelector("[data-title]");
